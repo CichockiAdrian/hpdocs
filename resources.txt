@@ -1,0 +1,263 @@
+Php artisan make:model nazwa -cmrf
+
+
+
+
+public function index()
+    {
+        $products = Product::all();
+        return view("products.index", ["products"=> $products]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view("products.create");
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $product = new Product();
+        $product->name = "test1";
+        $product->price = 10.5;
+        $product->description = "opis1";
+        $product->save;
+
+        return redirect()->route("product.index");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->foreignId('user_id')->nullable()->index();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->longText('payload');
+            $table->integer('last_activity')->index();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('sessions');
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+class DBShowController extends Controller
+{
+    public function ShowTableUsers()
+    {
+        // return DB::table("users")->get();
+        // return DB::table("users")->select('name','email')->get();
+        return DB::table("users")->insert([ 
+            'name' => 'Tomasz',
+            'email' => 'Misiek',
+            'password' => Hash::make('kochamfurry123~Bartosz')
+        ]);
+    }
+}
+
+
+
+
+
+
+
+<h3>Samochód</h3>
+    <form action="CarController" method="get">
+        <input type="text" name="marka" placeholder="Podaj markę" autofocus value="{{old('marka')}}"></input>
+        @error('marka')
+        {{$message}}
+        @enderror<br>
+        <input type="number" name="pojemnosc" placeholder="Podaj pojemność" value="{{old('pojemnosc')}}"></input>
+        @error('pojemnosc')
+        {{$message}}
+        @enderror<br>
+        <input type="email" name="email" placeholder="Podaj email" value="{{old('email')}}"></input>
+        @error('email')
+        {{$message}}
+        @enderror<br><br>
+        <input type="submit" name="sprawdz"></input>
+    </form>
+    
+    <h3>Błędy:</h3>
+    @if($errors->any()) 
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{$error}}</li>
+            @endforeach
+        </ul>
+    @endif
+
+
+
+
+
+
+
+Route::get('/car', function () {
+    return view('car');
+})->name('car');
+
+Route::get('CarController',[\App\Http\Controllers\CarController::class,'CarValid']);
+
+
+
+
+
+
+
+
+ public function CarValid(Request $req){
+
+        $req->validate([
+            'marka' => 'required | min:2 | max:15',
+            'email' => 'required | email',
+        ],[
+            
+            'marka.required' => 'Wypełnij pole :attribute',
+            'marka.min' => 'Wpisz conajmniej :min znaki do pola :attribute',
+            'marka.max' => 'Możesz wpisać maksymalnie :max znaków do pola :attribute',
+
+            'email.required' => 'Wypełnij pole :attribute',
+            'email.email' => 'Pole :attribute musi być typu email',
+        
+        ]);
+
+        $data =[
+            'marka' => $req->input('marka'),
+            'pojemnosc' => $req->input('pojemnosc'),
+            'email' => $req->input('email'),
+        ];
+
+        return view('test', $data);
+
+
+
+
+
+
+
+
+class ShowController extends Controller
+{
+    public function show(){
+        return"kontroler ShowController";
+    }
+
+    public function showFirstName(){
+        $date =[
+            "firstName" => 'Janusz',
+            "lastName" => "Nowak",
+            "city" => "Poznań"
+        ];
+        return View("/data",$date);
+    }
+    
+
+}
+
+
+
+
+
+{
+
+
+    public function FormularzGet(Request $req){
+        $req->validate([
+            "imie"=> "required|min:4|max:15",
+            "nazwisko"=>"required|min:5|max:20",
+            "email"=>"required|email"
+        ],
+        [
+            "imie.required"=>"Pole imie jest wymagane",
+            "nazwisko.required"=>"Pole nazwisko jest wymagane",
+            "email.required"=> "Pole email jest wymagane",
+
+            "email.email"=>"Pole musi być emailem",
+
+            "imie.max"=>"Imie moze mieć maksymalnie :max znaków",
+            "imie.min"=>":Attribute moze mieć minimalnie :min znaków",
+
+            "nazwisko.max"=>"Imie moze mieć maksymalnie :max znaków",
+            "nazwisko.min"=>":Attribute moze mieć minimalnie :min znaków",
+
+        ]);
+
+        return view("uzytkownik",$req);
+
+        // $dane=[
+        //     'imie'=>$req->input("imie"),
+        //     'nazwisko'=>$req->input("nazwisko"),
+        //     'email'=>$req->input("email"),
+        // ];
+        // return view('uzytkownik',$dane);
+    }
+}
+
+
+
+
+
+
+
+ <form action="FormController" method="get">
+        <input type="text" name="imie" id="imie" placeholder="podaj imie" value="{{old('imie')}}" autofocus>@error('imie'){{$message}}@enderror
+            <br>
+        <input type="text" name="nazwisko" id="nazwisko" placeholder="podaj nazwisko" value="{{old('nazwisko')}}">@error('nazwisko'){{$message}}@enderror<br>
+        <input type="text" name="email" id="email" placeholder="podaj emial" value="{{old('email')}}">@error('email'){{$message}}@enderror<br>
+        <input type="submit" value="zatwierdz">
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
